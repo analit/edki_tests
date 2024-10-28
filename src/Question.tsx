@@ -45,7 +45,7 @@ function Question({ question }: Props) {
                 <Card.Text>
                     <ListGroup>
                         {question.answers.map((answer: Answer, i: number) =>
-                            <ListGroup.Item>
+                            <ListGroup.Item key={question.number + "-" + i}>
                                 <Form.Check
                                     type={'radio'}
                                     label={answer.number + ") " + answer.text}
