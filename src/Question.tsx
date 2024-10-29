@@ -15,10 +15,11 @@ export type Question = {
 }
 
 type Props = {
-    question: Question
+    question: Question,
+    addAnswer: (questionNumber: number, answerResult: string) => void
 }
 
-function Question({ question }: Props) {
+function Question({ question, addAnswer }: Props) {
     const [result, setResult] = useState<string | null>(null);
     const [textResult, setTextResult] = useState<string | null>(null)
 
@@ -26,14 +27,27 @@ function Question({ question }: Props) {
         setTextResult(result === question.right ? "ok" : "error")
     }
 
+    function onClickRadio(answerNumber: string) {
+        setResult(answerNumber)
+        addAnswer(question.number, answerNumber);
+    }
+
     function Result({ result }: { result: string }) {
         return (
             result === 'ok'
                 ?
-                <CheckLg color='green' size={50} />
+                <CheckLg color='green' size={35} />
                 :
-                <X color='red' size={50} />
+                <X color='red' size={35} />
         )
+    }
+
+    function getColorButton(): string {
+        const colorMap: { [key: string]: string } = {
+            ok: "success",
+            error: "danger",
+        }
+        return textResult ? colorMap[textResult] : 'primary'
     }
 
     return (
@@ -42,22 +56,20 @@ function Question({ question }: Props) {
                 <Card.Title>
                     {question.number}. {question.text}
                 </Card.Title>
-                <Card.Text>
-                    <ListGroup>
-                        {question.answers.map((answer: Answer, i: number) =>
-                            <ListGroup.Item key={question.number + "-" + i}>
-                                <Form.Check
-                                    type={'radio'}
-                                    label={answer.number + ") " + answer.text}
-                                    name={'group-' + question.number}
-                                    onClick={() => setResult(answer.number)}
-                                    id={question.number + "_" + i}
-                                />
-                            </ListGroup.Item>
-                        )}
-                    </ListGroup>
-                </Card.Text>
-                <Button onClick={onClickCheck}>Check</Button>
+                <ListGroup className='mb-3'>
+                    {question.answers.map((answer: Answer, i: number) =>
+                        <ListGroup.Item key={question.number + "-" + i}>
+                            <Form.Check
+                                type={'radio'}
+                                label={answer.number + ") " + answer.text}
+                                name={'group-' + question.number}
+                                onClick={() => onClickRadio(answer.number)}
+                                id={question.number + "_" + i}
+                            />
+                        </ListGroup.Item>
+                    )}
+                </ListGroup>
+                <Button onClick={onClickCheck} variant={'outline-' + getColorButton()} disabled={result===null}>Check</Button>{' '}
                 {textResult ? <Result result={textResult} /> : null}
             </Card.Body>
         </Card>
