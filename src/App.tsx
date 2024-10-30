@@ -10,9 +10,14 @@ function App() {
     const [result, setResult] = useState<{ [key: number]: string }>({});
     const [calculateResult, setCalculateResult] = useState<{ [key: string]: number }>({})
     const [showResult, setShowResult] = useState<boolean>(false);
+    const [showRightAnswers, setShowRightAnswers] = useState<boolean>(false)
 
     function addAnswer(questionNumber: number, answerResult: string) {
         setResult({...result, [questionNumber]: answerResult});
+    }
+
+    function showHideRightAnswers() {
+        setShowRightAnswers(!showRightAnswers);
     }
 
     function calculate() {
@@ -40,13 +45,14 @@ function App() {
         <div className="App">
             <Container>
                 {data.questions.map((question: QuestonType, i: number) =>
-                    <Question key={i} question={question} addAnswer={addAnswer}/>
+                    <Question key={i} question={question} addAnswer={addAnswer} showRightAnswer={showRightAnswers}/>
                 )}
             </Container>
             <div className='footer'>
                 <Container>
                     <Button variant='outline-primary' onClick={calculate}>Calculate</Button>{' '}
-                    <Button variant='outline-danger' onClick={() => window.location.reload()}>Reset</Button>
+                    <Button variant='outline-danger' onClick={() => window.location.reload()}>Reset</Button>{' '}
+                    <Button variant='outline-secondary' onClick={showHideRightAnswers}>Show the Right Answers</Button>
                 </Container>
             </div>
             <Modal show={showResult} onHide={() => setShowResult(false)}>

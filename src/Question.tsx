@@ -7,7 +7,7 @@ export type Answer = {
     text: string,
 }
 
-export type Question = {
+export type QuestionType = {
     number: number,
     text: string,
     right: string,
@@ -15,11 +15,12 @@ export type Question = {
 }
 
 type Props = {
-    question: Question,
-    addAnswer: (questionNumber: number, answerResult: string) => void
+    question: QuestionType,
+    addAnswer: (questionNumber: number, answerResult: string) => void,
+    showRightAnswer: boolean
 }
 
-function Question({ question, addAnswer }: Props) {
+function Question({ question, addAnswer, showRightAnswer }: Props) {
     const [result, setResult] = useState<string | null>(null);
     const [textResult, setTextResult] = useState<string | null>(null)
 
