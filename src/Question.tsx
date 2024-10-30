@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { Button, Card, Form, ListGroup } from 'react-bootstrap'
-import { CheckLg, X } from 'react-bootstrap-icons'
+import React, {useState} from 'react'
+import {Button, Card, Form, ListGroup} from 'react-bootstrap'
+import {CheckLg, X} from 'react-bootstrap-icons'
 
 export type Answer = {
     number: string,
@@ -17,10 +17,10 @@ export type QuestionType = {
 type Props = {
     question: QuestionType,
     addAnswer: (questionNumber: number, answerResult: string) => void,
-    showRightAnswer: boolean
+    isShowRightAnswer: boolean
 }
 
-function Question({ question, addAnswer, showRightAnswer }: Props) {
+function Question({question, addAnswer, isShowRightAnswer}: Props) {
     const [result, setResult] = useState<string | null>(null);
     const [textResult, setTextResult] = useState<string | null>(null)
 
@@ -33,13 +33,13 @@ function Question({ question, addAnswer, showRightAnswer }: Props) {
         addAnswer(question.number, answerNumber);
     }
 
-    function Result({ result }: { result: string }) {
+    function Result({result}: { result: string }) {
         return (
             result === 'ok'
                 ?
-                <CheckLg color='green' size={35} />
+                <CheckLg color='green' size={35}/>
                 :
-                <X color='red' size={35} />
+                <X color='red' size={35}/>
         )
     }
 
@@ -59,7 +59,8 @@ function Question({ question, addAnswer, showRightAnswer }: Props) {
                 </Card.Title>
                 <ListGroup className='mb-3'>
                     {question.answers.map((answer: Answer, i: number) =>
-                        <ListGroup.Item key={question.number + "-" + i}>
+                        <ListGroup.Item key={question.number + "-" + i}
+                                        className={(isShowRightAnswer && question.right === answer.number) ? 'right-answer' : ""}>
                             <Form.Check
                                 type={'radio'}
                                 label={answer.number + ") " + answer.text}
@@ -70,8 +71,9 @@ function Question({ question, addAnswer, showRightAnswer }: Props) {
                         </ListGroup.Item>
                     )}
                 </ListGroup>
-                <Button onClick={onClickCheck} variant={'outline-' + getColorButton()} disabled={result===null}>Check</Button>{' '}
-                {textResult ? <Result result={textResult} /> : null}
+                <Button onClick={onClickCheck} variant={'outline-' + getColorButton()}
+                        disabled={result === null}>Перевірити</Button>{' '}
+                {textResult ? <Result result={textResult}/> : null}
             </Card.Body>
         </Card>
     )

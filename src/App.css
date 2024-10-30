@@ -1,3 +1,7 @@
+.right-answer {
+  font-weight: bold;
+}
+
 .footer {
   position: fixed;
   width: 100%;
